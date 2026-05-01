@@ -12,13 +12,14 @@ pip install -r requirements.txt
 
 2. Put your V1 model file in `model/` (e.g. `model/emotion_detection_v1.keras`) or set `MODEL_PATH` env var.
 3. Set API key (env var `API_KEY`) or edit `.env`
+4. Set Gemini key in `.env` as `GOOGLE_API_KEY=...` if you want feedback suggestions from Gemini
 
 Run locally (development):
 
 ```bash
 $env:API_KEY='your_key_here'
 $env:MODEL_PATH='model/emotion_detection_v1.keras'
-uvicorn model_api.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Request example (curl):
@@ -42,3 +43,4 @@ Replacing model:
 Notes:
 - `main.py` includes minimal re-implementations of `LabelSmoothingLoss` and `SqueezeExcitation` to support loading the V1 model.
 - If your model uses additional custom objects, add them to `custom_objects` in `main.py`.
+- Keep `.env` local only. Do not commit it to GitHub.

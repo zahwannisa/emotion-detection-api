@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: emotion-detection-api
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: API_KEY
+        sync: false
+      - key: MODEL_PATH
+        value: /app/model/emotion_detection_v1.keras
+      - key: GOOGLE_API_KEY
+        sync: false
