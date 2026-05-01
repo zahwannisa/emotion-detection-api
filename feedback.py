@@ -16,7 +16,8 @@ def init_gemini_client():
         logger.warning("GOOGLE_API_KEY not set - will use fallback suggestions only")
         return None
     try:
-        return genai.Client(api_key=api_key)
+        genai.configure(api_key=api_key)
+        return True  # Mark as initialized
     except Exception as e:
         logger.warning(f"Failed to initialize Gemini client: {e}")
         return None
@@ -57,11 +58,8 @@ class FeedbackGenerator:
                     f"Berikan 1 kalimat motivasi singkat dalam bahasa Indonesia yang bijaksana dan supportive. "
                     f"Jangan lebih dari 10 kata."
                 )
-                response = self.gemini_client.models.generate_content(
-                    model="gemini-2.0-flash",
-                    contents=prompt,
-                    config=genai.GenerateContentConfig(max_output_tokens=50)
-                )
+                model = genai.GenerativeModel("gemini-2.0-flash")
+                response = model.generate_content(prompt)
                 suggestion = response.text.strip()
                 if suggestion:
                     return suggestion
