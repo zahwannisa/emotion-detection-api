@@ -4,7 +4,7 @@ Memberikan motivasi/suggestion berdasarkan emosi yang terdeteksi.
 """
 
 import os
-from google import genai
+import google.generativeai as genai
 import logging
 
 logger = logging.getLogger(__name__)
