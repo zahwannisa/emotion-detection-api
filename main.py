@@ -69,7 +69,7 @@ def load_model():
         'LabelSmoothingLoss': LabelSmoothingLoss,
         'SqueezeExcitation': SqueezeExcitation
     }
-    model = tf.keras.models.load_model(MODEL_PATH, custom_objects=custom_objects)
+    model = tf.keras.models.load_model(MODEL_PATH, custom_objects=custom_objects, compile=False)
     return model
 
 try:
