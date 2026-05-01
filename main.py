@@ -44,12 +44,14 @@ class LabelSmoothingLoss(tf.keras.losses.Loss):
         return tf.keras.losses.categorical_crossentropy(y_true_smoothed, y_pred)
 
 class SqueezeExcitation(tf.keras.layers.Layer):
-    def __init__(self, ratio=16, **kwargs):
+    def __init__(self, filters=None, ratio=16, **kwargs):
         super().__init__(**kwargs)
+        self.filters = filters
         self.ratio = ratio
 
     def build(self, input_shape):
-        channels = input_shape[-1]
+        channels = self.filters or input_shape[-1]
+        self.filters = channels
         self.avg_pool = tf.keras.layers.GlobalAveragePooling2D()
         self.fc1 = tf.keras.layers.Dense(max(1, channels // self.ratio), activation='relu')
         self.fc2 = tf.keras.layers.Dense(channels, activation='sigmoid')
@@ -60,6 +62,14 @@ class SqueezeExcitation(tf.keras.layers.Layer):
         x = self.fc2(x)
         x = tf.reshape(x, [-1, 1, 1, tf.shape(inputs)[-1]])
         return inputs * x
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'filters': self.filters,
+            'ratio': self.ratio,
+        })
+        return config
 
 # Load model once at startup
 def load_model():
